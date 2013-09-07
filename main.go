@@ -13,12 +13,17 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
-	if len(args) > 0 {
-		for _, p := range args {
-			filepath.Walk(p, walker)
+	if len(args) == 0 {
+		args = []string{"."}
+	}
+
+	for _, path := range args {
+		err := filepath.Walk(path, walker)
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
-	} else {
-		filepath.Walk(".", walker)
 	}
 }
 
